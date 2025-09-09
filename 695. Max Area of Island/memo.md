@@ -191,3 +191,45 @@ class Solution:
             return False
         return True
 ```
+
+===
+
+2025/9/9更新
+# step4
+Odaさんのcommentを元にもう一回度書いてみる
+```py
+LAND = 1
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        def getAreaOfIsland(location: tuple[int, int]) -> int:
+            stack = [location]
+            area = 0
+            while stack:
+                location = stack.pop()
+                x, y = location
+                # grid外の場合
+                if not (0 <= x < len(grid) and 0 <= y < len(grid[0])):
+                    continue
+                # みる必要がない場合
+                if grid[x][y] != LAND or location in seen:
+                    continue
+                area += 1
+                seen.add(location)
+                stack.append((x + 1, y))
+                stack.append((x - 1, y))
+                stack.append((x, y + 1))
+                stack.append((x, y - 1))
+            return area
+        
+        seen = set()
+        max_area = 0
+        for x in range(len(grid)):
+            for y in range(len(grid[0])):
+                location = (x, y)
+                if grid[x][y] != LAND or location in seen:
+                    continue
+                area = getAreaOfIsland(location)
+                max_area = max(max_area, area)
+        
+        return max_area
+```
